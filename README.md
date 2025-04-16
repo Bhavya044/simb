@@ -1,18 +1,24 @@
 # Simbian Security Operations Demo
 
-This project demonstrates the difference between security operations with and without Simbian AI. It showcases real-time alert handling, automated responses, and the efficiency gains provided by AI-powered security operations.
+This project demonstrates the difference between security operations with and without Simbian AI. Built with Next.js 14 and Tailwind CSS;
 
 ## Features
 
-- Real-time alert visualization
-- Interactive step-by-step process flow
-- Responsive design for all devices
-- Smooth animations and transitions
-- Modern UI with Tailwind CSS
+### Without Simbian
 
-## Technologies Used
+- Real-time alert cards showing growing numbers (Ignored Alerts = 200, Wrongly Closed = 35, Active Threats = 5)
+- Animated status messages showing manual security operations struggles
+- Visual indicators of alert fatigue and missed threats
 
-- Next.js 14
+### With Simbian
+
+- Step-by-step flow showing automated security operations
+- Clean, zero-alert cards demonstrating perfect security posture
+- Animated transitions showing efficiency gains
+
+## Tech Stack
+
+- Next.js 14 with App Router
 - TypeScript
 - Tailwind CSS
 - Framer Motion
@@ -21,22 +27,25 @@ This project demonstrates the difference between security operations with and wi
 ## Getting Started
 
 1. Clone the repository:
+
 ```bash
 git clone <repository-url>
 cd simbian
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Run the development server:
+
 ```bash
 npm run dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open [http://localhost:3000](http://localhost:3000) to see the result.
 
 ## Project Structure
 
@@ -45,26 +54,26 @@ src/
 ├── app/                 # Next.js app directory
 ├── components/         # React components
 │   ├── alerts/        # Alert-related components
-│   └── sections/      # Main page sections
-├── styles/            # Global styles
-└── types/             # TypeScript type definitions
+│   │   ├── AlertCard.tsx
+│   │   └── AlertSummaryCard.tsx
+│   ├── sections/      # Main page sections
+│   │   └── SimbianComparison.tsx
+│   ├── UI/           # Reusable UI components
+│   │   ├── Card.tsx
+│   │   ├── Icon.tsx
+│   │   ├── IconBox.tsx
+│   │   ├── Spinner.tsx
+│   │   └── Icons/     # SVG icons
+│   ├── BackgroundWrapper.tsx
+│   ├── HeroSection.tsx
+│   └── Toolbar.tsx
+├── hooks/             # Custom React hooks
+│   └── useVisualMode.ts
+├── pages/             # Next.js pages
+└── utils/             # Utility functions
+    └── util.helper.ts
 ```
 
-## Development
+## Development Commands
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+- `npm run dev`
