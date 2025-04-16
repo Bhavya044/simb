@@ -13,7 +13,7 @@ const AlertCard: React.FC<AlertCardProps> = ({ title, icon, subTitle, variant = 
     <div className="flex items-center gap-2">
       <div
         className={clsx(
-          'p-2 rounded-md backdrop-blur-xs ring-1 ring-black/5',
+          'p-2 rounded-md backdrop-blur-md ring-1 ring-black/5',
           {
             'bg-red-500/5': variant === "error",
             'bg-green-500/5': variant === "success",

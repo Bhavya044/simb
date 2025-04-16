@@ -7,6 +7,9 @@ import AlertCard from '../alerts/AlertCard';
 import { ClockIcon } from '../UI/Icons/ClockIcon';
 import { CrossIcon } from '../UI/Icons/CrossIcon';
 import { MonitorIcon } from '../UI/Icons/MonitorIcon';
+import { TerminalIcon } from '../UI/Icons/TerminalIcon';
+import { ChatGPTIcon } from '../UI/Icons/ChatGPTIcon';
+import { UserIcon } from '../UI/Icons/UserIcon';
 
 
 
@@ -23,19 +26,7 @@ const DUMMY_ALERTS = [
 
 type AlertType = 'ignored' | 'wrongly' | 'active';
 
-interface AlertCardProps {
-  title: string;
-  count: number;
-  icon: ReactNode;
-  alerts: string[];
-  iconBg: string;
-  countColor: string;
-}
 
-interface ProblemStatementProps {
-  icon: ReactNode;
-  text: string;
-}
 
 
 const WithoutSimbAlertCards = [
@@ -57,20 +48,36 @@ const WithoutSimbAlertCards = [
 
 const STATUS_MESSAGES = [
   {
-    title: 'Missed it!',
-    description: 'We have more alerts than time to triage them.',
-    icon: 'cube'
+    title: 'Waiting for Analyst',
+    description: 'Analyst is dealing with other problems, hold on...',
+    icon: <ClockIcon color={"#ababab"} />
   },
   {
     title: 'Writing Query',
     description: 'Querying across so many tools gets complex...',
-    icon: 'terminal'
+    icon: <TerminalIcon color={"#ababab"} />
   },
   {
-    title: 'Waiting for Analyst',
-    description: 'Analyst is dealing with other problems, hold on...',
-    icon: 'clock'
-  }
+    title: 'Asking ChatGPT..',
+    description: 'What does this powershell command even mean?',
+    icon: <ChatGPTIcon />
+  },
+  {
+    title: 'Asking Supervisor..',
+    description: 'The analyst is in training, let\'s see what they say',
+    icon: <UserIcon color={"#ababab"} />
+  },
+  {
+    title: 'Oops!',
+    description: 'Mistook that one as a false positive. Youre only Human..',
+    icon: <CrossIcon color={"#ababab"} />
+  },
+  {
+    title: 'Missed it!',
+    description: 'We have more alerts than time to triage them.',
+    icon: <ClockIcon color={"#ababab"} />
+  },
+
 ];
 
 const WithoutSimbian = () => {
@@ -101,62 +108,42 @@ const WithoutSimbian = () => {
       }));
 
       setCurrentStatusIndex((prev) => (prev + 1) % STATUS_MESSAGES.length);
-    }, 2000);
+    }, 2500);
 
     return () => clearInterval(interval);
   }, []);
 
   return (
     <div className="p-8 min-h-screen">
-      {/* Header */}
 
 
-      {/* Main Content Grid */}
       <div className="grid grid-cols-[1.2fr_auto_1fr] gap-16 relative">
-        {/* Left Column - Problem Statements */}
-        <div className='flex flex-col gap-20'>
-          <div className="space-y-2">
-            <Card>
-              <AlertCard title='Missed it' subTitle='We have more alerts than time to triage them.' icon={<ClockIcon color={"#ababab"} />} />
-            </Card>
-            {/* <AnimatePresence mode="wait">
-            <motion.div
-              key={currentStatusIndex}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-              className="bg-[#151825] p-4 rounded-lg mb-8 flex items-center space-x-3 w-full"
-            >
-              <div className="w-8 h-8 bg-[#1D1F2E] rounded-lg flex items-center justify-center shrink-0">
-                {STATUS_MESSAGES[currentStatusIndex].icon === 'cube' ? <CubeIcon /> :
-                  STATUS_MESSAGES[currentStatusIndex].icon === 'terminal' ? <TerminalIcon /> :
-                    <ClockIcon />}
-              </div>
-              <div>
-                <h3 className="text-white/90 font-medium mb-0.5">
-                  {STATUS_MESSAGES[currentStatusIndex].title}
-                </h3>
-                <p className="text-gray-400 text-sm">
-                  {STATUS_MESSAGES[currentStatusIndex].description}
-                </p>
-              </div>
-            </motion.div>
-          </AnimatePresence> */}
+        <div className='flex flex-col gap-14'>
 
-            {/* <ProblemStatement
-            icon={<CrossIcon />}
-            text="Wasting valuable analyst time on false positives"
-          />
-          <ProblemStatement
-            icon={<MonitorIcon />}
-            text="Processing one alert at a time, missing the big picture"
-          />
-          <ProblemStatement
-            icon={<ClockIcon />}
-            text="More time fixing SOAR automation, less time on real threats"
-          /> */}
+
+          <div className="relative h-[100px] w-full overflow-hidden">
+            <AnimatePresence mode="popLayout" initial={false}>
+              <motion.div
+                key={currentStatusIndex}
+                className="absolute w-full"
+                initial={{ y: 50, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -50, opacity: 0 }}
+                transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }} // custom easing for natural feel
+              >
+                <Card>
+                  <AlertCard
+                    title={STATUS_MESSAGES[currentStatusIndex].title}
+                    icon={STATUS_MESSAGES[currentStatusIndex].icon}
+                    subTitle={STATUS_MESSAGES[currentStatusIndex].description}
+                  />
+                </Card>
+              </motion.div>
+            </AnimatePresence>
           </div>
+
+
+
           <div className='flex flex-col gap-3'>
             {WithoutSimbAlertCards.map((card, index) => (
               <Card key={index} className='w-sm'>
@@ -225,48 +212,7 @@ const WithoutSimbian = () => {
   );
 };
 
-interface AlertSummaryProps {
-  title: string;
-  count: number;
-  icon: ReactNode;
-  iconStrip: ReactNode;
-}
 
-const AlertSummary: React.FC<AlertSummaryProps> = ({ title, count, icon, iconStrip }) => (
-  <div className="relative">
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="bg-[#151825] rounded-lg p-4 relative z-10"
-    >
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-3">
-          <div className="text-gray-400 w-5 h-5">{icon}</div>
-          <span className="text-gray-300 font-medium">{title}</span>
-        </div>
-        <span className={`${title === 'Active Threats' ? 'text-red-500' : 'text-[#4F6BFF]'} text-2xl font-semibold`}>{count}</span>
-      </div>
-      {iconStrip}
-    </motion.div>
-    <div className="absolute left-1/2 -bottom-8 transform -translate-x-1/2 h-8 w-[2px] bg-[#4F6BFF] z-0"></div>
-    <div className="absolute left-1/2 -bottom-8 transform -translate-x-1/2 w-4 h-4">
-      <div className="w-full h-full border-l-2 border-b-2 border-[#4F6BFF] transform rotate-45 translate-y-1"></div>
-    </div>
-  </div>
-);
-
-const ProblemStatement: React.FC<ProblemStatementProps> = ({ icon, text }) => (
-  <motion.div
-    initial={{ opacity: 0, x: -20 }}
-    animate={{ opacity: 1, x: 0 }}
-    className="flex items-center space-x-3 bg-[#151825] p-4 rounded-lg"
-  >
-    <div className="w-5 h-5 text-red-400">
-      {icon}
-    </div>
-    <span className="text-red-400 text-sm font-medium">{text}</span>
-  </motion.div>
-);
 
 interface IconStripProps {
   count: number;
@@ -297,12 +243,6 @@ const CubeIcon = () => (
   </svg>
 );
 
-const TerminalIcon = () => (
-  <svg className="w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M4 17L10 11L4 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M12 19H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
 
 const AlertIcon = () => (
   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -351,13 +291,6 @@ const PlaneIcon = () => (
 const BoltIcon = () => (
   <svg className="w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
-
-const UserIcon = () => (
-  <svg className="w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
