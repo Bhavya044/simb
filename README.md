@@ -1,51 +1,75 @@
 # Simbian Security Operations Demo
 
-This project demonstrates the difference between security operations with and without Simbian AI. Built with Next.js 14 and Tailwind CSS;
+This project shows how Simbian AI helps with security operations. It compares security work with and without Simbian using Next.js 14 and Tailwind CSS.
+
+## What I Did
+
+I made two views to show the difference:
+
+1. Without Simbian: Shows growing alerts and problems
+2. With Simbian: Shows how things get better with AI
+
+## Animations
+
+I used Framer Motion to make things move smoothly:
+
+- Numbers that change when alerts update
+- Messages that show what's happening
+- Smooth changes between views
+
+## Things to Fix Later
+
+If I had more time, I would:
+
+1. Make animations work better
+2. Add more things to click and try
+3. Make some UI changes in cards
+4. Show more details about alerts
 
 ## Features
 
 ### Without Simbian
 
-- Real-time alert cards showing growing numbers (Ignored Alerts = 200, Wrongly Closed = 35, Active Threats = 5)
-- Animated status messages showing manual security operations struggles
-- Visual indicators of alert fatigue and missed threats
+- Alert cards with growing numbers (200 ignored, 35 wrongly closed, 5 active threats)
+- Messages showing problems
+- Red warning signs
 
 ### With Simbian
 
-- Step-by-step flow showing automated security operations
-- Clean, zero-alert cards demonstrating perfect security posture
-- Animated transitions showing efficiency gains
+- Steps showing how Simbian works
+- Clean cards with no alerts
+- Green success signs
 
-## Tech Stack
+## Tech Used
 
-- Next.js 14 with App Router
+- Next.js 14
 - TypeScript
 - Tailwind CSS
 - Framer Motion
 - React
 
-## Getting Started
+## How to Start
 
-1. Clone the repository:
+1. Get the code:
 
 ```bash
 git clone <repository-url>
 cd simbian
 ```
 
-2. Install dependencies:
+2. Install what you need:
 
 ```bash
 npm install
 ```
 
-3. Run the development server:
+3. Start the server:
 
 ```bash
 npm run dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) to see the result.
+4. Open [http://localhost:3000](http://localhost:3000) to see it
 
 ## Project Structure
 
@@ -74,6 +98,13 @@ src/
     └── util.helper.ts
 ```
 
-## Development Commands
+## Commands
 
-- `npm run dev`
+- `npm run dev` - Start server
+- `npm run build` - Make production version
+- `npm run start` - Start production server
+- `npm run lint` - Check code
+
+## License
+
+MIT License
