@@ -1,8 +1,7 @@
 "use client";
 
-import GridIcon from "./icons/GridIcon";
-import BirdIcon from "./icons/BirdIcon";
 import IconBox from "./UI/IconBox";
+import BirdIcon from "./UI/Icons/BirdIcon";
 import ZigzagIcon from "./UI/Icons/ZigzagIcon";
 import Spinner from "./UI/Spinner";
 
