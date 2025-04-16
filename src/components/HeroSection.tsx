@@ -3,6 +3,7 @@
 import { useVisualMode } from "@/hooks/useVisualMode";
 import clsx from "clsx";
 import Icon from "./UI/Icon";
+import { motion } from "framer-motion";
 
 export default function HeroSection() {
   const visualMode = useVisualMode();
@@ -18,7 +19,10 @@ export default function HeroSection() {
         }
       )}
     >
-      <div
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
         className={clsx(
           "flex flex-col max-w-md space-y-4",
           {
@@ -47,10 +51,10 @@ export default function HeroSection() {
         </p>
         {!isWithSimbian && (
           <button className="bg-white text-black flex justify-center items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold hover:bg-gray-100 transition">
-            Book a Demo  <Icon src="/svg/simbian.svg" height={10} width={10} />
+            Book a Demo <Icon src="/svg/simbian.svg" height={10} width={10} />
           </button>
         )}
-      </div>
+      </motion.div>
     </section>
   );
 }

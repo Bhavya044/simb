@@ -13,9 +13,9 @@ export default function HomePage() {
 
   return (
     <BackgroundWrapper>
-      <HeroSection/>
+
       <AnimatePresence mode="wait">
-        {visualMode==="withoutSimbian" ? (
+        {visualMode === "withoutSimbian" ? (
           <motion.section
             key="without"
             initial={{ x: 0 }}
@@ -37,6 +37,6 @@ export default function HomePage() {
           </motion.section>
         )}
       </AnimatePresence>
-      </BackgroundWrapper>
+    </BackgroundWrapper>
   );
 }
