@@ -101,10 +101,4 @@ src/
 ## Commands
 
 - `npm run dev` - Start server
-- `npm run build` - Make production version
-- `npm run start` - Start production server
-- `npm run lint` - Check code
 
-## License
-
-MIT License
