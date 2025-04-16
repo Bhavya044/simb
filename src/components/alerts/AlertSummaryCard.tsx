@@ -7,9 +7,10 @@ interface AlertSummaryCardProps {
     title: string;
     initialCount: number;
     icon: React.ReactNode;
-    threatLevel?: number;
+    threatLevel?: number;  // Optional prop
     className?: string;
-    alerts: string[];  // Accepting alerts as a prop
+    variant?: "success" | "default";  // Optional prop
+    alerts?: string[];  // Optional prop
 }
 
 const AlertSummaryCard: React.FC<AlertSummaryCardProps> = ({
@@ -18,7 +19,8 @@ const AlertSummaryCard: React.FC<AlertSummaryCardProps> = ({
     icon,
     threatLevel = 100,
     className = "",
-    alerts,
+    variant = "default",
+    alerts = [],
 }) => {
     const [count, setCount] = useState(initialCount);
     const [isError, setIsError] = useState(false);
@@ -28,7 +30,7 @@ const AlertSummaryCard: React.FC<AlertSummaryCardProps> = ({
     const [charIndex, setCharIndex] = useState(0);
     const [isFlickering, setIsFlickering] = useState(false);
 
-    const currentAlert = alerts[alertIndex];  // Use alerts prop instead of DUMMY_ALERTS
+    const currentAlert = alerts[alertIndex] || ""; // Fallback to empty string if alerts are empty
 
     // Typing effect
     useEffect(() => {
@@ -37,7 +39,7 @@ const AlertSummaryCard: React.FC<AlertSummaryCardProps> = ({
     }, [alertIndex]);
 
     useEffect(() => {
-        if (charIndex < currentAlert.length) {
+        if (variant === "default" && charIndex < currentAlert.length) {
             const typingTimer = setTimeout(() => {
                 setTypedText((prev) => prev + currentAlert[charIndex]);
                 setCharIndex((prev) => prev + 1);
@@ -45,16 +47,22 @@ const AlertSummaryCard: React.FC<AlertSummaryCardProps> = ({
 
             return () => clearTimeout(typingTimer);
         }
-    }, [charIndex, currentAlert]);
+        else {
+            setCharIndex(0)
+            setTypedText("")
+        }
+    }, [charIndex, currentAlert, variant]);
 
     // Alert rotation
     useEffect(() => {
-        const alertTimer = setInterval(() => {
-            setAlertIndex((prev) => (prev + 1) % alerts.length);  // Use alerts.length
-            setShake(true);
-        }, 3000); // time per alert
+        if (alerts.length > 0) {
+            const alertTimer = setInterval(() => {
+                setAlertIndex((prev) => (prev + 1) % alerts.length);
+                setShake(true);
+            }, 3000);
 
-        return () => clearInterval(alertTimer);
+            return () => clearInterval(alertTimer);
+        }
     }, [alerts]);
 
     // Shake animation reset
@@ -65,33 +73,42 @@ const AlertSummaryCard: React.FC<AlertSummaryCardProps> = ({
         }
     }, [shake]);
 
-    // Flicker effect when in error state
     useEffect(() => {
         if (isError) {
             const flickerInterval = setInterval(() => {
                 setIsFlickering((prev) => !prev);
-            }, 500); // Flicker every 500ms
+            }, 500);
 
             return () => clearInterval(flickerInterval);
         }
     }, [isError]);
 
-    // Count simulation
+    // Count simulation and handling variant success
     useEffect(() => {
-        const interval = setInterval(() => {
-            const increase = Math.floor(Math.random() * 3);
-            setCount((prev) => prev + increase);
-        }, 2000);
-
-        return () => clearInterval(interval);
-    }, []);
+        if (variant === "success") {
+            const decreaseInterval = setInterval(() => {
+                setCount((prev) => Math.max(0, prev - 1)); // Decrease rapidly until 0
+            }, 10);
+            return () => clearInterval(decreaseInterval);
+        } else {
+            const interval = setInterval(() => {
+                const increase = Math.floor(Math.random() * 3);
+                setCount((prev) => prev + increase);
+            }, 2000);
+            return () => clearInterval(interval);
+        }
+    }, [variant]);
 
     useEffect(() => {
-        if (count >= threatLevel) {
+        if (variant !== "success" && threatLevel && count >= threatLevel) {
             setIsError(true);
             setShake(true);
         }
-    }, [count, threatLevel]);
+        else {
+            setIsError(false)
+            setShake(false)
+        }
+    }, [count, threatLevel, variant]);
 
     return (
         <motion.div
@@ -130,10 +147,11 @@ const AlertSummaryCard: React.FC<AlertSummaryCardProps> = ({
                     <motion.span
                         key={count}
                         className={clsx("text-2xl font-bold", {
-                            "text-red-500": isError,
-                            "text-gray-200": !isError,
+                            "text-green-500": variant === "success",  // Apply green color when success variant
+                            "text-red-500": isError && variant !== "success", // Apply red color in error state if not success
+                            "text-blue-500": !isError && variant !== "success",  // Default text color
                         })}
-                        initial={{ scale: 1.2, opacity: 0 }}
+                        initial={{ scale: 1.2, opacity: 1 }}
                         animate={{ scale: 1, opacity: 1 }}
                         transition={{ duration: 0.3 }}
                     >
@@ -142,30 +160,32 @@ const AlertSummaryCard: React.FC<AlertSummaryCardProps> = ({
                 </div>
 
                 {/* Alert Display - Typing */}
-                <div className="min-h-[24px] overflow-hidden relative">
-                    <AnimatePresence mode="wait">
-                        <motion.div
-                            key={alertIndex}
-                            initial={{ y: 20, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            exit={{ y: -20, opacity: 0 }}
-                            transition={{ duration: 0.4 }}
-                            className={clsx(
-                                "absolute w-full text-sm",
-                                isError ? "text-red-500" : "text-gray-400",
-                                "truncate", "text-xs"
-                            )}
-                        >
-                            {typedText}
-                            <span
-                                className={clsx("animate-pulse inline-block w-1 h-4 ml-1", {
-                                    "bg-red-500": isError,
-                                    "bg-gray-400": !isError,
-                                })}
-                            />
-                        </motion.div>
-                    </AnimatePresence>
-                </div>
+                {
+                    variant === "default" ? <div className="min-h-[24px] overflow-hidden relative">
+                        <AnimatePresence mode="wait">
+                            <motion.div
+                                key={alertIndex}
+                                initial={{ y: 20, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                exit={{ y: -20, opacity: 0 }}
+                                transition={{ duration: 0.4 }}
+                                className={clsx(
+                                    "absolute w-full text-sm",
+                                    isError ? "text-red-500" : "text-gray-400",
+                                    "truncate", "text-xs"
+                                )}
+                            >
+                                {typedText}
+                                <span
+                                    className={clsx("animate-pulse inline-block w-1 h-4 ml-1", {
+                                        "bg-red-500": isError,
+                                        "bg-gray-400": !isError,
+                                    })}
+                                />
+                            </motion.div>
+                        </AnimatePresence>
+                    </div> : null
+                }
             </Card>
         </motion.div>
     );

@@ -23,13 +23,13 @@ const AlertCard: React.FC<AlertCardProps> = ({ title, icon, subTitle, variant = 
       >
         {icon}
       </div>
-      <div className="flex flex-col gap-0.5 text-white/70">
+      <div className={`flex flex-col gap-0.5  text-white/70`}>
         {title && <div className="font-semibold text-xs">{title}</div>}
         <div className={clsx(title ? 'text-[10px] font-light' : 'text-xs font-medium')}>
           {subTitle}
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

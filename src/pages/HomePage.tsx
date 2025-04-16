@@ -3,9 +3,10 @@
 import { motion, AnimatePresence } from "framer-motion";
 import WithoutSimbian from "@/components/sections/WithoutSimbian";
 import WithSimbian from "@/components/sections/WithSimbian";
-import HeroSection from "./HeroSection";
-import BackgroundWrapper from "./BackgroundWrapper";
+import HeroSection from "../components/HeroSection";
+import BackgroundWrapper from "../components/BackgroundWrapper";
 import { useVisualMode } from "@/hooks/useVisualMode";
+import SimbianComparison from "../components/sections/SimbianComparison";
 
 export default function HomePage() {
 
@@ -13,8 +14,9 @@ export default function HomePage() {
 
   return (
     <BackgroundWrapper>
+      <SimbianComparison />
 
-      <AnimatePresence mode="wait">
+      {/* <AnimatePresence mode="wait">
         {visualMode === "withoutSimbian" ? (
           <motion.section
             key="without"
@@ -36,7 +38,7 @@ export default function HomePage() {
             <WithSimbian />
           </motion.section>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
     </BackgroundWrapper>
   );
 }

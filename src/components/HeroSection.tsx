@@ -50,7 +50,7 @@ export default function HeroSection() {
             : "Relax! Our AI Agents will take care of everything."}
         </p>
         {!isWithSimbian && (
-          <button className="bg-white text-black flex justify-center items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold hover:bg-gray-100 transition">
+          <button className="bg-white text-black flex justify-center items-center gap-1.5 rounded-full px-4 py-2 text-xs font-semibold hover:bg-gray-100 transition">
             Book a Demo <Icon src="/svg/simbian.svg" height={10} width={10} />
           </button>
         )}
